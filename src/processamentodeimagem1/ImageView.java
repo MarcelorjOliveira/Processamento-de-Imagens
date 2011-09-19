@@ -24,6 +24,11 @@
 package processamentodeimagem1;
 
 
+import com.pearsoneduc.ip.op.EqualiseOp;
+import com.pearsoneduc.ip.op.Histogram;
+import com.pearsoneduc.ip.op.HistogramException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.*;
@@ -72,7 +77,8 @@ public class ImageView extends JLabel implements Scrollable {
   /** Size of current view, if we are in a JScrollPane. */
   private Dimension viewSize;
 
-
+  private int opcao;
+  
   ///////////////////////////////// METHODS ////////////////////////////////
 
 
@@ -98,6 +104,15 @@ public class ImageView extends JLabel implements Scrollable {
      Math.min(DEFAULT_VIEW_WIDTH, image.getWidth()),
      Math.min(DEFAULT_VIEW_HEIGHT, image.getHeight()));
     setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
+  }
+  public ImageView(BufferedImage img, BufferedImageOp op,int opcao) {
+    setImage(img);
+    setOperation(op);
+    viewSize = new Dimension(
+     Math.min(DEFAULT_VIEW_WIDTH, image.getWidth()),
+     Math.min(DEFAULT_VIEW_HEIGHT, image.getHeight()));
+    setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
+    this.opcao = opcao;
   }
 
 
@@ -140,10 +155,27 @@ public class ImageView extends JLabel implements Scrollable {
   public void paintComponent(Graphics g) {
     if (operation != null) {
       Graphics2D g2 = (Graphics2D) g;
-      g2.drawImage(image, operation, 0, 0);
+      BufferedImage imagemOperacionalizada = operation.filter(image,null);
+      
+      if(opcao == 1)
+      {
+          try {
+              
+          Histogram histograma = new Histogram(imagemOperacionalizada);
+          EqualiseOp equalise = new EqualiseOp(histograma);
+          imagemOperacionalizada = equalise.filter(imagemOperacionalizada, null);        
+          
+          } catch (Exception e) {
+                e.printStackTrace();
+          }
+          
+      }
+      g2.drawImage(imagemOperacionalizada,0,0,this);
     }
     else
-      g.drawImage(image, 0, 0, this);
+    {
+        g.drawImage(image, 0, 0, this);
+    }
   }
 
 

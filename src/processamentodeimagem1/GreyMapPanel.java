@@ -28,6 +28,7 @@ package processamentodeimagem1;
 ***************************************************************************/
 
 
+import com.pearsoneduc.ip.op.EqualiseOp;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -35,6 +36,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import com.pearsoneduc.ip.op.GreyMapOp;
+import com.pearsoneduc.ip.op.Histogram;
 
 
 
@@ -97,7 +99,6 @@ public class GreyMapPanel
     controlPane.add(lowSlider);
     controlPane.add(highSlider);
     add(controlPane, BorderLayout.SOUTH);
-
   }
 
 

@@ -15,6 +15,7 @@ import com.pearsoneduc.ip.op.ThresholdOp;
 import java.util.Hashtable;
 import java.util.Vector;
 import javax.media.jai.PlanarImage;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 /**
@@ -25,8 +26,8 @@ public class JanelaBrilhoEContraste extends javax.swing.JFrame implements Janela
 
     private JanelaBrilhoEContrasteObserver principal;
     private PlanarImage srcImage;
-    private ImageView imageview;
-    private GreyMapPanel painelBrilhoEContrasteLogico;
+    private ImageView imageview,imageviewEqualizada;
+    private GreyMapPanel painelBrilhoEContrasteLogico,painelBrilhoEContrasteLogicoEqualizado;
     
     /** Creates new form JanelaBrilhoEContraste */
     public JanelaBrilhoEContraste(PlanarImage srcImage,JanelaBrilhoEContrasteObserver observador) {
@@ -34,6 +35,7 @@ public class JanelaBrilhoEContraste extends javax.swing.JFrame implements Janela
         this.srcImage = srcImage;
         LinearOp op = new LinearOp();
         imageview = new ImageView(srcImage.getAsBufferedImage(),op);
+        imageviewEqualizada = new ImageView(srcImage.getAsBufferedImage(),op,1);
         
         Hashtable ops = new Hashtable();
             ops.put("Brilho", op);
@@ -44,9 +46,13 @@ public class JanelaBrilhoEContraste extends javax.swing.JFrame implements Janela
         Vector names = new Vector();
             names.addElement("Brilho");
             names.addElement("Contraste");
+            
         painelBrilhoEContrasteLogico = new GreyMapPanel(imageview,ops,names);
+        painelBrilhoEContrasteLogicoEqualizado = new GreyMapPanel(imageviewEqualizada,ops,names);
         painelBrilhoEContraste.add(painelBrilhoEContrasteLogico);    
+        painelBrilhoEContraste.add(painelBrilhoEContrasteLogicoEqualizado);
         painelBrilhoEContraste.add(new JScrollPane(imageview));
+        painelBrilhoEContraste.add(new JScrollPane(imageviewEqualizada));
         registerObserver(observador);
         pack();
         
