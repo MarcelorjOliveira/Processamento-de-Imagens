@@ -74,9 +74,13 @@ public class TelaPrincipal extends javax.swing.JFrame implements JanelaBrilhoECo
         itemPassaAlta = new javax.swing.JMenuItem();
         itemPassaBaixa = new javax.swing.JMenuItem();
         itemPassaBanda = new javax.swing.JMenuItem();
+        menuDetectoresdeContorno = new javax.swing.JMenu();
+        itemPrewitt = new javax.swing.JMenuItem();
+        itemSobel = new javax.swing.JMenuItem();
+        itemLaplaciano = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Processamento de Imagem 2");
+        setTitle("Processamento de Imagem 3");
 
         menuArquivo.setText("Arquivo");
 
@@ -155,6 +159,34 @@ public class TelaPrincipal extends javax.swing.JFrame implements JanelaBrilhoECo
         submenuTransformadaFourier.add(itemPassaBanda);
 
         menuProcessamento.add(submenuTransformadaFourier);
+
+        menuDetectoresdeContorno.setText("Detectores de Contorno");
+
+        itemPrewitt.setText("Prewitt");
+        itemPrewitt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemPrewittActionPerformed(evt);
+            }
+        });
+        menuDetectoresdeContorno.add(itemPrewitt);
+
+        itemSobel.setText("Sobel");
+        itemSobel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemSobelActionPerformed(evt);
+            }
+        });
+        menuDetectoresdeContorno.add(itemSobel);
+
+        itemLaplaciano.setText("Laplaciano");
+        itemLaplaciano.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemLaplacianoActionPerformed(evt);
+            }
+        });
+        menuDetectoresdeContorno.add(itemLaplaciano);
+
+        menuProcessamento.add(menuDetectoresdeContorno);
 
         jMenuBar1.add(menuProcessamento);
 
@@ -245,14 +277,6 @@ private void itemPassaAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             BufferedImage imagemBufferizada = fft.getSpectrum();
             fft.transform();
             
-            /*float[] dadosKernel = { 0.0F, -1.0F , 0.0F,
-                        -1.0F, 5.0F, -1.0F,
-                        0.0F, -1.0F, 0.0F};
-            kernel = new KernelJAI(3,3,1,1,dadosKernel);
-            
-            //create the convolve operation.
-            srcImage = JAI.create("convolve" , srcImage, kernel);*/
-            
             JFrame janela = new JFrame("Passa Alta");
             janela.add(new JScrollPane(new ImageView(imagemBufferizada)));
             janela.pack();
@@ -305,6 +329,55 @@ private void itemPassaBandaActionPerformed(java.awt.event.ActionEvent evt) {//GE
         }
 }//GEN-LAST:event_itemPassaBandaActionPerformed
 
+private void itemPrewittActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPrewittActionPerformed
+    float[] kernelPrewittHorizontal = { -1.0F, 0.0F , 1.0F,
+                        -1.0F, 0.0F, 1.0F,
+                        -1.0F, 0.0F, 1.0F};
+            kernel = new KernelJAI(3,3,1,1,kernelPrewittHorizontal);
+            
+            //create the convolve operation.
+            srcImage = JAI.create("convolve" , srcImage, kernel);
+            
+   float[] kernelPrewittVertical = { -1.0F, -1.0F , -1.0F,
+                        0.0F, 0.0F, 0.0F,
+                        1.0F, 1.0F, 1.0F};
+            kernel = new KernelJAI(3,3,1,1,kernelPrewittVertical);
+            
+            //create the convolve operation.
+            srcImage = JAI.create("convolve" , srcImage, kernel);
+            srcdj.set(srcImage);
+}//GEN-LAST:event_itemPrewittActionPerformed
+
+private void itemSobelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSobelActionPerformed
+    float[] kernelSobelHorizontal = { -1.0F, 0.0F , 1.0F,
+                        -2.0F, 0.0F, 2.0F,
+                        -1.0F, 0.0F, 1.0F};
+            kernel = new KernelJAI(3,3,1,1,kernelSobelHorizontal);
+            
+            //create the convolve operation.
+            srcImage = JAI.create("convolve" , srcImage, kernel);
+            
+   float[] kernelSobelVertical = { -1.0F, -2.0F , -1.0F,
+                        0.0F, 0.0F, 0.0F,
+                        1.0F, 2.0F, 1.0F};
+            kernel = new KernelJAI(3,3,1,1,kernelSobelVertical);
+            
+            //create the convolve operation.
+            srcImage = JAI.create("convolve" , srcImage, kernel);
+            srcdj.set(srcImage);
+}//GEN-LAST:event_itemSobelActionPerformed
+
+private void itemLaplacianoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLaplacianoActionPerformed
+ float[] kernelLaplaciano = { 0.0F, -1.0F , 0.0F,
+                        -1.0F, 4.0F, -1.0F,
+                        0.0F, -1.0F, 0.0F};
+            kernel = new KernelJAI(3,3,1,1,kernelLaplaciano);
+            
+            //create the convolve operation.
+            srcImage = JAI.create("convolve" , srcImage, kernel);
+            srcdj.set(srcImage);
+}//GEN-LAST:event_itemLaplacianoActionPerformed
+
     public void displayImage (File path)
     {
         //Load the image which file name was passed as the first argument to the application
@@ -346,12 +419,16 @@ private void itemPassaBandaActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private javax.swing.JMenuItem itemAbrir;
     private javax.swing.JMenuItem itemBrilhoeContraste;
     private javax.swing.JMenuItem itemEqualizacao;
+    private javax.swing.JMenuItem itemLaplaciano;
     private javax.swing.JMenuItem itemPassaAlta;
     private javax.swing.JMenuItem itemPassaBaixa;
     private javax.swing.JMenuItem itemPassaBanda;
+    private javax.swing.JMenuItem itemPrewitt;
     private javax.swing.JMenuItem itemSair;
+    private javax.swing.JMenuItem itemSobel;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuArquivo;
+    private javax.swing.JMenu menuDetectoresdeContorno;
     private javax.swing.JMenu menuProcessamento;
     private javax.swing.JMenu subMenuHistograma;
     private javax.swing.JMenu submenuTransformadaFourier;
